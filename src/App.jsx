@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import ProductCarousel from './components/ProductCarousel';
+import Star from './components/Star';
 
 function App() {
     return (
