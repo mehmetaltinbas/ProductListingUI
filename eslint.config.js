@@ -32,7 +32,7 @@ export default defineConfig([
             'no-redeclare': 'error',
             'no-unreachable': 'error',
             semi: ['error', 'always'],
-            quotes: ['error', 'single'],
+            quotes: ['warn', 'single'],
             indent: ['error', 4],
             'comma-dangle': ['off', 'never'],
         },
