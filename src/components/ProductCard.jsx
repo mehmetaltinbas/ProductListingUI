@@ -3,22 +3,7 @@ import Star from './Star';
 import ColorOption from './ColorOption';
 
 export default function ProductCard({ product }) {
-    const [popularityScore, setPopularityScore] = useState(0);
     const [selectedProductColor, setSelectedProductColor] = useState('yellow');
-
-    useState(() => {
-        const score = product.popularityScore * 5;
-        const stringifiedScore = score.toString();
-        let simplifiedScore = '';
-        for (let i = 0; i < stringifiedScore.length; i++) {
-            simplifiedScore += stringifiedScore[i];
-            if (stringifiedScore[i] === '.') {
-                simplifiedScore += stringifiedScore[i + 1];
-                break;
-            }
-        }
-        setPopularityScore(simplifiedScore);
-    }, []);
 
     return (
         <div className="w-[250px] h-[400px] flex-shrink-0 flex flex-col justify-center gap-4" >
@@ -52,7 +37,7 @@ export default function ProductCard({ product }) {
                 {product.starValues?.map((starValue, index) => (
                     <Star key={index} id={`${product.id}${index}`} value={starValue} />
                 ))}
-                <p className="pl-2 font-[AvenirBook] text-[14px]">{popularityScore}/5</p>
+                <p className="pl-2 font-[AvenirBook] text-[14px]">{(product.popularityScore * 5).toFixed(1)}/5</p>
             </div>
         </div>
     );

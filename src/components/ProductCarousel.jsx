@@ -1,46 +1,16 @@
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import ProductCard from './productCard';
+import ProductCard from './ProductCard';
 
-export default function ProductCarousel() {
-    const [products, setProducts] = useState([]);
+export default function ProductCarousel({ products }) {
     const scrollContainer = useRef(null);
-
-    async function fetchData() {
-        const response = (await axios.get(`${import.meta.env.VITE_BASE_API_URL}product`)).data;
-        if (!response.isSuccess) {
-            alert(response.message);
-        } else {
-            for (const product of response.products) {
-                product.starValues = [];
-                const score = product.popularityScore * 5;
-                const floorOfScore = Math.floor(score);
-                const remainder = score - floorOfScore;
-                for (let i = 1; i <= floorOfScore; i++) {
-                    product.starValues.push(1);
-                }
-                product.starValues.push(remainder);
-                const remaining = 5 - product.starValues.length;
-                if (remaining >= 1) {
-                    for (let i = 1; i <= remaining; i++) {
-                        product.starValues.push(0);
-                    }
-                }
-            }
-            setProducts(response.products);
-        }
-    }
-
-    useEffect(() => {
-        fetchData();
-    }, []);
 
     function scrollByClick(e) {
         if (!scrollContainer.current) {
             return;
         }
         const direction = e.target.dataset.direction;
-        const offset = 300;
+        const offset = 500;
         if (direction === 'left') {
             scrollContainer.current.scrollBy({ left: -offset, behavior: 'smooth' });
         } else if (direction === 'right') {
