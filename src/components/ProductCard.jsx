@@ -27,8 +27,8 @@ export default function ProductCard({ product }) {
                 className="w-[250px] h-[250px] rounded-[16px] object-cover"
             />
             <div className="flex flex-col justify-center gap-[2px]">
-                <p>{product.name}</p>
-                <p>${product.price} USD</p>
+                <p className='font-[MontserratRegular] text-[15px]'>{product.name}</p>
+                <p className='font-[MontserratRegular] text-[15px]'>${product.price} USD</p>
             </div>
             <div className="flex items-center gap-6">
                 <ColorOption
@@ -47,12 +47,12 @@ export default function ProductCard({ product }) {
                     color={'rose'}
                 />
             </div>
-            <p>{selectedProductColor.charAt(0).toUpperCase() + selectedProductColor.slice(1)} Gold</p>
+            <p className='font-[AvenirBook] text-[12px]'>{selectedProductColor.charAt(0).toUpperCase() + selectedProductColor.slice(1)} Gold</p>
             <div className="flex items-center gap-[1px]">
                 {product.starValues?.map((starValue, index) => (
                     <Star key={index} id={`${product.id}${index}`} value={starValue} />
                 ))}
-                <p className="pl-2">{popularityScore}/5</p>
+                <p className="pl-2 font-[AvenirBook] text-[14px]">{popularityScore}/5</p>
             </div>
         </div>
     );
