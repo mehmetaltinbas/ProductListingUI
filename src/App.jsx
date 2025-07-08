@@ -6,6 +6,8 @@ import Filter from './components/Filter';
 function App() {
     const [products, setProducts] = useState([]);
 
+    console.log(`the api_url env variable: ${import.meta.env.VITE_BASE_API_URL}`);
+
     async function fetchData(filterBy, min, max) {
         let response;
         if (filterBy) {
