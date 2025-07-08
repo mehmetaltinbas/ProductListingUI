@@ -1,5 +1,3 @@
-
-
 export default function Star({ id, value }) {
     const clampedValue = Math.min(Math.max(value, 0), 1);
     const totalWidth = 24;
@@ -43,4 +41,4 @@ export default function Star({ id, value }) {
             </svg>
         </div>
     );
-};
+}
