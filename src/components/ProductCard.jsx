@@ -6,16 +6,18 @@ export default function ProductCard({ product }) {
     const [selectedProductColor, setSelectedProductColor] = useState('yellow');
 
     return (
-        <div className="w-[250px] h-[400px] flex-shrink-0 flex flex-col justify-center gap-4" >
+        <div className="w-[178px] h-[320px] sm:w-[200px] sm:h-[360px]
+            flex flex-shrink-0 flex-col justify-center gap-4" 
+        >
             <img
                 src={product.images[selectedProductColor]}
-                className="w-[250px] h-[250px] rounded-[16px] object-cover"
+                className="w-full h-full rounded-[16px] object-cover"
             />
             <div className="flex flex-col justify-center gap-[2px]">
-                <p className='font-[MontserratRegular] text-[15px]'>{product.name}</p>
+                <p className='font-[MontserratMedium] text-[15px]'>{product.name}</p>
                 <p className='font-[MontserratRegular] text-[15px]'>${product.price} USD</p>
             </div>
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-3 pl-1">
                 <ColorOption
                     selectedProductColor={selectedProductColor}
                     setSelectedProductColor={setSelectedProductColor}

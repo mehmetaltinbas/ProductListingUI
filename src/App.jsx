@@ -1,29 +1,25 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import ProductCarousel from './components/ProductCarousel';
-import Filter from './components/Filter';
 import { LoadingPage } from './components/LoadingPage';
+import FilterForm from './components/FilterList';
 
 function App() {
     const [products, setProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-
-    console.log(`the api_url env variable: ${import.meta.env.VITE_BASE_API_URL}`);
+    const [isFilterFormHidden, setIsFilterFormHidden] = useState(true);
 
     async function fetchData(filterBy, min, max) {
         setIsLoading(true);
         let response;
         if (filterBy) {
-            console.log(`sending request to: ${import.meta.env.VITE_BASE_API_URL}product/filter/${filterBy}?min=${min}&max=${max}`);
             response = (await axios.get(`${import.meta.env.VITE_BASE_API_URL}product/filter/${filterBy}?min=${min}&max=${max}`)).data;
         } else {
             response = (await axios.get(`${import.meta.env.VITE_BASE_API_URL}product`)).data;
         }
         if (!response.isSuccess) {
-            alert(response.message);
+            return ;
         } else {
-            console.log(response.products);
-            alert(response.message);
             for (const product of response.products) {
                 product.starValues = [];
                 const score = product.popularityScore * 5;
@@ -49,11 +45,28 @@ function App() {
         fetchData();
     }, []);
 
+    function toggleFilterForm() {
+        setIsFilterFormHidden(prev => !prev);
+    }
+
     return isLoading ?  <LoadingPage /> : (
-        <div className="relative h-full w-full flex flex-col items-center gap-2">
+        <div className="relative h-full w-full 
+            flex flex-col items-center gap-2"
+        >
             <p className="pt-20 pb-12 font-[AvenirBook] text-[45px]">Product List</p>
             <ProductCarousel products={products} />
-            <Filter fetchData={fetchData}/>
+            <button 
+                onClick={toggleFilterForm}
+                className='absolute left-4 top-4 sm:left-6 sm:top-6'
+            >
+                <svg className="w-4 h-4 sm:w-6 sm:h-6" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-funnel-fill" viewBox="0 0 16 16">
+                    <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5z"/>
+                </svg>
+            </button>
+            <FilterForm 
+                isHidden={isFilterFormHidden}
+                fetchData={fetchData}
+            />
         </div>
     );
 }

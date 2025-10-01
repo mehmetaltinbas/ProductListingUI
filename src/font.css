@@ -7,3 +7,8 @@
   font-family: 'MontserratRegular';
   src: url('./assets/fonts/montserrat/Montserrat-Regular.ttf') format('truetype');
 }
+
+@font-face {
+  font-family: 'MontserratMedium';
+  src: url('./assets/fonts/montserat/Montserrat-Medium.otf');
+}

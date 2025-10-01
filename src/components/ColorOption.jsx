@@ -1,12 +1,19 @@
+import { useEffect, useState } from "react";
+
 export default function ColorOption({ selectedProductColor, setSelectedProductColor, color }) {
-    let backGroundColor = '';
-    if (color === 'yellow') {
-        backGroundColor = '#E6CA97';
-    } else if (color === 'white') {
-        backGroundColor = '#D9D9D9';
-    } else if (color === 'rose') {
-        backGroundColor = '#E1A4A9';
-    }
+    const [backgroundColor, setBackgroundColor] = useState('');
+    const [isSelectedColor, setIsSelectedColor] = useState(false);
+
+    const map = new Map([
+        ['yellow', '#E6CA97'],
+        ['white', '#D9D9D9'],
+        ['rose', '#E1A4A9'],
+    ]);
+
+    useEffect(() => {
+        setBackgroundColor(map.get(color));
+        setIsSelectedColor(selectedProductColor === `${color}` ? true : false);
+    }, [color, selectedProductColor]);
 
     function changeColor(e) {
         setSelectedProductColor(e.target.dataset.color);
@@ -15,13 +22,14 @@ export default function ColorOption({ selectedProductColor, setSelectedProductCo
     return (
         <div className="relative flex flex-col justify-center items-center">
             <div
-                className={`${selectedProductColor === `${color}` ? '' : 'invisible'}
+                className={`${isSelectedColor ? '' : 'hidden'}
                 absolute pointer-events-none w-[26px] h-[26px] rounded-full border border-1 border-black p-[10px]`}
-            ></div>
+            >
+            </div>
             <button
                 onClick={(e) => changeColor(e)}
                 data-color={color}
-                className={`w-[20px] h-[20px] bg-[${backGroundColor}] rounded-full`}
+                className={`w-[20px] h-[20px] bg-[${backgroundColor}] rounded-full`}
             ></button>
         </div>
     );

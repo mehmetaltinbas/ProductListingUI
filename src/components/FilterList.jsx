@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export default function FilterList({ fetchData }) {
+export default function FilterForm({ isHidden, fetchData }) {
     const [priceFilter, setPriceFilter] = useState({
         minPrice: 0,
         maxPrice: 0,
@@ -57,61 +57,69 @@ export default function FilterList({ fetchData }) {
     }
 
     return (
-        <div className={`w-[300px] h-[300px] border border-1 border-black rounded-[10px] flex justify-center items-center gap-8`}>
-            <div className="flex flex-col justify-center items-center gap-1">
-                <p className='underline'>PriceRange</p>
-                <p>min: </p>
-                <input
-                    name="minPrice"
-                    value={priceFilter.minPrice}
-                    onChange={handlePriceChange}
-                    className="w-[50px] h-[30px] border border-1 border-black"
-                    type="number"
-                />
-                <p>max: </p>
-                <input
-                    name="maxPrice"
-                    value={priceFilter.maxPrice}
-                    onChange={handlePriceChange}
-                    className="w-[50px] h-[30px] border border-1 border-black"
-                    type="number"
-                />
-                <button
-                    data-filter-by='pricerange'
-                    onClick={Filter}
-                    className="px-2 py-1 border border-1 border-black rounded-full"
-                >
-                    Filter
-                </button>
-            </div>
+        <div 
+            className={`${isHidden ? 'hidden' : ''} absolute bg-white left-8 top-10 sm:left-10 sm:top-12
+            flex justify-center items-center gap-2`}
+        >
+            <div 
+                className={`w-[300px] h-[300px] border border-1 rounded-[10px] shadow-md
+                flex justify-center items-center gap-8`}
+            >
+                <div className="flex flex-col justify-center items-center gap-1">
+                    <p className='underline'>PriceRange</p>
+                    <p>min: </p>
+                    <input
+                        name="minPrice"
+                        value={priceFilter.minPrice}
+                        onChange={handlePriceChange}
+                        className="w-[50px] h-[30px] border border-1 border-black"
+                        type="number"
+                    />
+                    <p>max: </p>
+                    <input
+                        name="maxPrice"
+                        value={priceFilter.maxPrice}
+                        onChange={handlePriceChange}
+                        className="w-[50px] h-[30px] border border-1 border-black"
+                        type="number"
+                    />
+                    <button
+                        data-filter-by='pricerange'
+                        onClick={Filter}
+                        className="px-2 py-1 border border-1 border-black rounded-full"
+                    >
+                        Filter
+                    </button>
+                </div>
 
-            <div className="flex flex-col justify-center items-center gap-2">
-                <p className='underline'>PopularityScore</p>
-                <p>min: </p>
-                <input
-                    name="minScore"
-                    value={scoreFilter.minScore}
-                    onChange={handleScoreChange}
-                    className="w-[50px] h-[30px] border border-1 border-black"
-                    type="number"
-                    step="0.01"
-                />
-                <p>max: </p>
-                <input
-                    name="maxScore"
-                    value={scoreFilter.maxScore}
-                    onChange={handleScoreChange}
-                    className="w-[50px] h-[30px] border border-1 border-black"
-                    type="number"
-                    step="0.01"
-                />
-                <button
-                    data-filter-by='popularityscore'
-                    onClick={Filter}
-                    className="px-2 py-1 border border-1 border-black rounded-full"
-                >
-                    Filter
-                </button>
+                <div className="flex flex-col justify-center items-center gap-2">
+                    <p className='underline'>PopularityScore</p>
+                    <p>min: </p>
+                    <input
+                        name="minScore"
+                        value={scoreFilter.minScore}
+                        onChange={handleScoreChange}
+                        className="w-[50px] h-[30px] border border-1 border-black"
+                        type="number"
+                        step="0.01"
+                    />
+                    <p>max: </p>
+                    <input
+                        name="maxScore"
+                        value={scoreFilter.maxScore}
+                        onChange={handleScoreChange}
+                        className="w-[50px] h-[30px] border border-1 border-black"
+                        type="number"
+                        step="0.01"
+                    />
+                    <button
+                        data-filter-by='popularityscore'
+                        onClick={Filter}
+                        className="px-2 py-1 border border-1 border-black rounded-full"
+                    >
+                        Filter
+                    </button>
+                </div>
             </div>
         </div>
     );

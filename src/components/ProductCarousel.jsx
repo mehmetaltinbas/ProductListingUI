@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import ProductCard from './ProductCard';
+import leftArrow from '../assets/images/left-arrow.png';
+import rightArrow from '../assets/images/right-arrow.png';
 
 export default function ProductCarousel({ products }) {
     const scrollContainer = useRef(null);
@@ -19,14 +21,40 @@ export default function ProductCarousel({ products }) {
     }
 
     return (
-        <div className='w-full h-[450px] px-48 flex justify-center items-center gap-16'>
-            <button data-direction='left' onClick={(e) => scrollByClick(e)} className='text-4xl'>&lt;</button>
-            <div id='scrollContainer' ref={scrollContainer} className="w-full h-[450px] flex gap-32 px-20 overflow-x-auto">
+        <div className='w-full h-[350px] sm:h-[400px] px-4 sm:px-14 
+            flex justify-center items-center gap-2 sm:gap-6'
+        >
+            <div className='h-full'>
+                <div className='h-[150px] sm:h-[190px] flex'>
+                    <button 
+                        data-direction='left' 
+                        onClick={(e) => scrollByClick(e)} 
+                        className='text-4xl'
+                    >
+                        <img src={leftArrow} className='pointer-events-none' />
+                    </button>
+                </div>
+            </div>
+            <div 
+                id='scrollContainer' 
+                ref={scrollContainer} 
+                className="w-full h-[350px] sm:h-[400px] flex gap-32 overflow-x-auto shadow-l-md"
+            >
                 {products.map((product, index) => (
                     <ProductCard key={index} product={product} />
                 ))}
             </div>
-            <button data-direction='right' onClick={(e) => scrollByClick(e)} className='text-4xl'>&gt;</button>
+            <div className='h-full'>
+                <div className='h-[150px] sm:h-[190px] flex'>
+                    <button 
+                        data-direction='right' 
+                        onClick={(e) => scrollByClick(e)} 
+                        className='text-4xl'
+                    >
+                        <img src={rightArrow} className='pointer-events-none' />
+                    </button>
+                </div>
+            </div>
         </div>
     );
 }
