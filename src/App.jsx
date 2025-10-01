@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import ProductCarousel from './components/ProductCarousel';
 import { LoadingPage } from './components/LoadingPage';
-import FilterForm from './components/FilterList';
+import FilterForm from './components/FilterForm';
 
 function App() {
     const [products, setProducts] = useState([]);
@@ -66,6 +66,7 @@ function App() {
             <FilterForm 
                 isHidden={isFilterFormHidden}
                 fetchData={fetchData}
+                toggle={toggleFilterForm}
             />
         </div>
     );
