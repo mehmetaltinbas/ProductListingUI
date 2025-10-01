@@ -1,15 +1,16 @@
 import { useState } from 'react';
-import { BlackButton } from './BlackButton';
+import { productService } from 'src/features/product/services/product.service.js';
+import { BlackButton } from 'src/shared/components/BlackButton.jsx';
 
-export default function FilterForm({ isHidden, fetchData, toggle }) {
+
+export function FilterForm({ isHidden, setProducts, setIsLoading, toggle }) {
     const [priceFilter, setPriceFilter] = useState({
-        minPrice: null,
-        maxPrice: null,
+        minPrice: undefined,
+        maxPrice: undefined,
     });
-
     const [scoreFilter, setScoreFilter] = useState({
-        minScore: null,
-        maxScore: null
+        minScore: undefined,
+        maxScore: undefined
     });
 
     function handlePriceChange(e) {
@@ -28,33 +29,10 @@ export default function FilterForm({ isHidden, fetchData, toggle }) {
         }));
     }
 
-    function Filter(e) {
-        const filterBy = e.target.dataset.filterBy;
-
-        if (filterBy === 'pricerange') {
-            const { minPrice, maxPrice } = priceFilter;
-            if ((minPrice < 0 || maxPrice < 0)) {
-                alert("price values cannot be less than 0");
-                return;
-            } else if ((minPrice > maxPrice)) {
-                alert ("min price value can't be bigger than max price");
-            } else {
-                fetchData(filterBy, minPrice, maxPrice );
-            }
-        }
-
-        if (filterBy === 'popularityscore') {
-            let { minScore, maxScore } = scoreFilter;
-            if (minScore < 0 || maxScore > 5) {
-                alert("Score values must be between 0 and 5");
-                return;
-            } else {
-                minScore = minScore /5;
-                maxScore = maxScore/5;
-                console.log(filterBy, minScore, maxScore);
-                fetchData(filterBy, minScore, maxScore);
-            }
-        }
+    async function handleOnSubmit(e) {
+        setIsLoading(true);
+        const response = await productService.readAllFiltered();
+        setIsLoading(false);
     }
 
     return (
@@ -98,7 +76,7 @@ export default function FilterForm({ isHidden, fetchData, toggle }) {
                     onChange={handleScoreChange}
                     placeholder='min...'
                     className="w-[75px] h-[30px] p-2 border rounded-[5px]"
-                    step="0.01"
+                    step="0.1"
                 />
                 <input
                     name="maxScore"
@@ -107,13 +85,13 @@ export default function FilterForm({ isHidden, fetchData, toggle }) {
                     onChange={handleScoreChange}
                     placeholder='max...'
                     className="w-[75px] h-[30px] p-2 border rounded-[5px]"
-                    step="0.01"
+                    step="0.1"
                 />
             </div>
 
             <BlackButton
                 data-filter-by='popularityscore'
-                onClick={Filter}
+                onClick={async () => await handleOnSubmit()}
                 className="cursor-pointer px-2 pt-[2px] pb-[1px] border-[2px] border-black rounded-[10px]
                 bg-black text-white text-xs
                 hover:bg-white hover:text-black"

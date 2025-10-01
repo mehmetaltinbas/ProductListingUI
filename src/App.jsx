@@ -1,43 +1,35 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
-import ProductCarousel from './components/ProductCarousel';
-import { LoadingPage } from './components/LoadingPage';
-import FilterForm from './components/FilterForm';
+import { ProductCarousel } from 'src/features/product/components/ProductCarousel';
+import { FilterForm } from 'src/features/product/components/FilterForm';
+import { LoadingPage } from 'src/features/product/components/LoadingPage';
 
 function App() {
     const [products, setProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isFilterFormHidden, setIsFilterFormHidden] = useState(true);
 
-    async function fetchData(filterBy, min, max) {
-        setIsLoading(true);
-        let response;
-        if (filterBy) {
-            response = (await axios.get(`${import.meta.env.VITE_BASE_API_URL}product/filter/${filterBy}?min=${min}&max=${max}`)).data;
-        } else {
-            response = (await axios.get(`${import.meta.env.VITE_BASE_API_URL}product`)).data;
-        }
+    async function fetchData() {
+        const response = await productService.readAll();
         if (!response.isSuccess) {
-            return ;
-        } else {
-            for (const product of response.products) {
-                product.starValues = [];
-                const score = product.popularityScore * 5;
-                const floorOfScore = Math.floor(score);
-                const remainder = score - floorOfScore;
-                for (let i = 1; i <= floorOfScore; i++) {
-                    product.starValues.push(1);
-                }
-                product.starValues.push(remainder);
-                const remaining = 5 - product.starValues.length;
-                if (remaining >= 1) {
-                    for (let i = 1; i <= remaining; i++) {
-                        product.starValues.push(0);
-                    }
+            alert(response.message);
+        }
+        for (const product of response.products) {
+            product.starValues = [];
+            const score = product.popularityScore * 5;
+            const floorOfScore = Math.floor(score);
+            const remainder = score - floorOfScore;
+            for (let i = 1; i <= floorOfScore; i++) {
+                product.starValues.push(1);
+            }
+            product.starValues.push(remainder);
+            const remaining = 5 - product.starValues.length;
+            if (remaining >= 1) {
+                for (let i = 1; i <= remaining; i++) {
+                    product.starValues.push(0);
                 }
             }
-            setProducts(response.products);
         }
+        setProducts(response.products);
         setIsLoading(false);
     }
 
@@ -63,13 +55,15 @@ function App() {
                     <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5z"/>
                 </svg>
             </button>
-            <FilterForm 
+            <FilterForm
                 isHidden={isFilterFormHidden}
-                fetchData={fetchData}
+                setProducts={setProducts}
+                setIsLoading={setIsLoading}
                 toggle={toggleFilterForm}
             />
         </div>
     );
 }
+import { productService } from 'src/features/product/services/product.service.js';
 
 export default App;

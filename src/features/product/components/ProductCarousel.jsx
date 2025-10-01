@@ -1,10 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
-import ProductCard from './ProductCard';
-import leftArrow from '../assets/images/left-arrow.png';
-import rightArrow from '../assets/images/right-arrow.png';
+import leftArrow from 'src/assets/images/left-arrow.png';
+import rightArrow from 'src/assets/images/right-arrow.png';
+import { ProductCard } from 'src/features/product/components/ProductCard';
 
-export default function ProductCarousel({ products }) {
+export function ProductCarousel({ products }) {
     const scrollContainer = useRef(null);
 
     function scrollByClick(e) {

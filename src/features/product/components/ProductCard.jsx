@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import Star from './Star';
-import ColorOption from './ColorOption';
+import ColorOption from 'src/features/product/components/ColorOption.jsx';
+import Star from 'src/features/product/components/Star.jsx';
 
-export default function ProductCard({ product }) {
+export function ProductCard({ product }) {
     const [selectedProductColor, setSelectedProductColor] = useState('yellow');
 
     return (
