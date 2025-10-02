@@ -7,12 +7,12 @@ async function readAll() {
     return response;
 }
 
-async function readAllFiltered() {
-    const respone = (await axiosInstance.get(`${baseUrl}/read-all/filter`)).data;
+async function readAllByFilter(readAllProductsByFilterDto) {
+    const respone = (await axiosInstance.post(`${baseUrl}/read-all/filter`, readAllProductsByFilterDto)).data;
     return respone;
 }
 
 export const productService = {
     readAll,
-    readAllFiltered,
+    readAllByFilter,
 };

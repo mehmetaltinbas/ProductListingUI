@@ -1,37 +1,34 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { productService } from 'src/features/product/services/product.service.js';
 import { BlackButton } from 'src/shared/components/BlackButton.jsx';
 
 
 export function FilterForm({ isHidden, setProducts, setIsLoading, toggle }) {
-    const [priceFilter, setPriceFilter] = useState({
-        minPrice: undefined,
-        maxPrice: undefined,
+    const [readAllProductsByFilterDto, setReadAllProductsByFilterDto] = useState({
+        price: {
+            min: undefined,
+            max: undefined,
+        },
+        popularityScore: {
+            min: undefined,
+            max: undefined,
+        }
     });
-    const [scoreFilter, setScoreFilter] = useState({
-        minScore: undefined,
-        maxScore: undefined
-    });
 
-    function handlePriceChange(e) {
-        const { name, value } = e.target;
-        setPriceFilter(prev => ({
-            ...prev,
-            [name]: Number(value)
-        }));
-    }
-
-    function handleScoreChange(e) {
-        const { name, value } = e.target;
-        setScoreFilter(prev => ({
-            ...prev,
-            [name]: Number(value)
-        }));
-    }
-
-    async function handleOnSubmit(e) {
+    async function handleOnSubmit() {
         setIsLoading(true);
-        const response = await productService.readAllFiltered();
+        const dto = {
+            price: {
+                min: Number(readAllProductsByFilterDto.price.min),
+                max: Number(readAllProductsByFilterDto.price.max)
+            },
+            popularityScore: {
+                min: Number(readAllProductsByFilterDto.popularityScore.min),
+                max: Number(readAllProductsByFilterDto.popularityScore.max)
+            }
+        };
+        const response = await productService.readAllByFilter(dto);
+        setProducts(response.products);
         setIsLoading(false);
     }
 
@@ -48,41 +45,49 @@ export function FilterForm({ isHidden, setProducts, setIsLoading, toggle }) {
             >X</button>
 
             <div className="flex justify-center items-center gap-4">
-                <p className='font-[AvenirBook]'>PriceRange:</p>
+                <p className='font-[AvenirBook]'>Price:</p>
                 <input
-                    name="minPrice"
-                    value={priceFilter.minPrice}
+                    value={readAllProductsByFilterDto.price.min}
                     type="number"
-                    onChange={handlePriceChange}
+                    onChange={(event) => setReadAllProductsByFilterDto(prev => ({
+                        ...prev,
+                        price: { min: event.target.value, max: prev.price.max }
+                    }))}
                     placeholder='min...'
                     className="w-[75px] h-[30px] p-2 border rounded-[5px]"
                 />
                 <input
-                    name="maxPrice"
-                    value={priceFilter.maxPrice}
+                    value={readAllProductsByFilterDto.price.max}
                     type="number"
-                    onChange={handlePriceChange}
+                    onChange={(event) => setReadAllProductsByFilterDto(prev => ({
+                        ...prev,
+                        price: { min: prev.price.min, max: event.target.value }
+                    }))}
                     placeholder='max...'
                     className="w-[75px] h-[30px] p-2 border rounded-[5px]"
                 />
             </div>
 
             <div className="flex justify-center items-center gap-4">
-                <p className='font-[AvenirBook]'>PopularityScore:</p>
+                <p className='font-[AvenirBook]'>Popularity Score:</p>
                 <input
-                    name="minScore"
-                    value={scoreFilter.minScore}
+                    value={readAllProductsByFilterDto.popularityScore.min}
                     type="number"
-                    onChange={handleScoreChange}
+                    onChange={(event) => setReadAllProductsByFilterDto(prev => ({
+                        ...prev,
+                        popularityScore: { min: event.target.value, max: prev.popularityScore.max }
+                    }))}
                     placeholder='min...'
                     className="w-[75px] h-[30px] p-2 border rounded-[5px]"
                     step="0.1"
                 />
                 <input
-                    name="maxScore"
-                    value={scoreFilter.maxScore}
+                    value={readAllProductsByFilterDto.popularityScore.max}
                     type="number"
-                    onChange={handleScoreChange}
+                    onChange={(event) => setReadAllProductsByFilterDto(prev => ({
+                        ...prev,
+                        popularityScore: { min: prev.popularityScore.min, max: event.target.value }
+                    }))}
                     placeholder='max...'
                     className="w-[75px] h-[30px] p-2 border rounded-[5px]"
                     step="0.1"
@@ -91,7 +96,10 @@ export function FilterForm({ isHidden, setProducts, setIsLoading, toggle }) {
 
             <BlackButton
                 data-filter-by='popularityscore'
-                onClick={async () => await handleOnSubmit()}
+                onClick={async () => {
+                    toggle();
+                    await handleOnSubmit();
+                }}
                 className="cursor-pointer px-2 pt-[2px] pb-[1px] border-[2px] border-black rounded-[10px]
                 bg-black text-white text-xs
                 hover:bg-white hover:text-black"

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { ProductCarousel } from 'src/features/product/components/ProductCarousel';
 import { FilterForm } from 'src/features/product/components/FilterForm';
 import { LoadingPage } from 'src/features/product/components/LoadingPage';
+import { productService } from 'src/features/product/services/product.service.js';
 
 function App() {
     const [products, setProducts] = useState([]);
@@ -12,22 +13,6 @@ function App() {
         const response = await productService.readAll();
         if (!response.isSuccess) {
             alert(response.message);
-        }
-        for (const product of response.products) {
-            product.starValues = [];
-            const score = product.popularityScore * 5;
-            const floorOfScore = Math.floor(score);
-            const remainder = score - floorOfScore;
-            for (let i = 1; i <= floorOfScore; i++) {
-                product.starValues.push(1);
-            }
-            product.starValues.push(remainder);
-            const remaining = 5 - product.starValues.length;
-            if (remaining >= 1) {
-                for (let i = 1; i <= remaining; i++) {
-                    product.starValues.push(0);
-                }
-            }
         }
         setProducts(response.products);
         setIsLoading(false);
@@ -64,6 +49,5 @@ function App() {
         </div>
     );
 }
-import { productService } from 'src/features/product/services/product.service.js';
 
 export default App;
